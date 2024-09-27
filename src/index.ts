@@ -23,7 +23,7 @@ app.use(cors({
     credentials: true
 }));
 
-const mongoURL = `mongodb+srv://poomhcg5441:sertchai@restapi.vn0x7.mongodb.net/task_management?retryWrites=true&w=majority&appName=RESTAPI`;
+const mongoURL = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@restapi.vn0x7.mongodb.net/task_management?retryWrites=true&w=majority&appName=RESTAPI`;
 mongoose.Promise = Promise;
 mongoose.connect(mongoURL);
 
@@ -32,6 +32,8 @@ mongoose.connection.on('error', (error: Error) => {
 })
 
 //Router
+import router from './router';
+app.use('/', router());
 
 // Middleware for error handling
 const errorHandler = (err: Error & { status?: number }, req: Request, res: Response, next: NextFunction) => {
