@@ -1,4 +1,4 @@
-import UsersModel, { UsersDocument } from "./users";
+import UsersModel from "./users";
 
 // Utils functions for Users Model
 export default class Users_Utils {
@@ -7,7 +7,7 @@ export default class Users_Utils {
         return UsersModel.find();
     }
 
-    static getUserById = (id: number) => {
+    static getUserById = (id: string) => {
         return UsersModel.findById(id);
     }
 
@@ -24,7 +24,7 @@ export default class Users_Utils {
         return newUser.toObject();
     };
 
-    static deleteUserById = async(id: number) => {
+    static deleteUserById = async(id: string) => {
         const deletedUser = await UsersModel.findByIdAndDelete(id);
         return deletedUser;
     }

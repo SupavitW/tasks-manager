@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import compression from 'compression';
 import * as dotenv from 'dotenv'
+import { HttpError } from './interfaces';
 dotenv.config()
 
 const PORT = process.env.PORT || 3000;
@@ -36,14 +37,15 @@ import router from './router';
 app.use('/', router());
 
 // Middleware for error handling
-const errorHandler = (err: Error & { status?: number }, req: Request, res: Response, next: NextFunction) => {
+const errorHandler = (err: HttpError, req: Request, res: Response, next: NextFunction) => {
     const status = err.status || 500;
     const message = err.message || 'Internal Server Error';
 
-    console.log(`Error ${status}: ${message}`);
+    console.log(`HTTP Error ${status}: ${message}`);
     console.log(err.stack);
-
+    
     res.status(status).json({ "Error": message });
+    return;
 };
 
 app.use(errorHandler);

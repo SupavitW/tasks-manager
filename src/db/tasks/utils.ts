@@ -1,4 +1,5 @@
-import TasksModel, { Task } from "./tasks";
+import TasksModel from "./tasks";
+import { Task } from "../../interfaces";
 
 // Utils functions for Tasks Model
 export class Tasks_Utils {
