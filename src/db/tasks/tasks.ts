@@ -6,8 +6,8 @@ const TasksSchema = new mongoose.Schema({
     description: {type: String, require: true},
     status: {type: String, enum: ['To Do', 'In Progress', 'Done'], default: 'To Do', require: true},
     priority: {type: String, enum: ['Low', 'Medium', 'High'], require: true},
-    due_date: {type: Date},
-    user_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Users', require: true},
+    due_date: {type: Date, require: true},
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'Users', require: true},
 });
 
 const TasksModel = mongoose.model<Task>('Tasks', TasksSchema);

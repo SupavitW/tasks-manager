@@ -4,6 +4,7 @@ import { get, merge } from 'lodash';
 import { HttpError } from '../interfaces';
 import * as dotev from 'dotenv';
 import jwt from 'jsonwebtoken';
+import user from '../router/user';
 dotev.config();
 
 export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {

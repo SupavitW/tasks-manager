@@ -38,12 +38,19 @@ app.use('/', router());
 
 // Middleware for error handling
 const errorHandler = (err: HttpError, req: Request, res: Response, next: NextFunction) => {
-    const status = err.status || 500;
     const message = err.message || 'Internal Server Error';
-
-    console.log(`HTTP Error ${status}: ${message}`);
-    console.log(err.stack);
+    let status = err.status;
     
+    if (message === 'jwt expired') {
+        status = 401;
+    }
+
+    if (status === 500) {
+        console.log(err.stack);
+    } else {
+        console.log(`HTTP Error ${status}: ${message}`);
+    }
+
     res.status(status).json({ "Error": message });
     return;
 };
