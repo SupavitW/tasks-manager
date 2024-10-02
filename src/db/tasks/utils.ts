@@ -7,6 +7,10 @@ export class Tasks_Utils {
         return TasksModel.find().populate('user'); // populate the user_id to show user details relative to each task
     }
 
+    static getTasksByDate = () => {
+        return TasksModel.find().populate('user').sort({ due_date: 1});
+    }
+
     static getTaskById = (id: Task['_id']) => { 
         return TasksModel.findById(id).populate('user');
     }

@@ -3,6 +3,8 @@ import { Tasks_Utils } from "../db/tasks/utils";
 import { HttpError } from "../interfaces";
 import Users_Utils from "../db/users/utils";
 import { ObjectId } from "mongoose";
+import { forEach } from "lodash";
+import dayjs from "dayjs";
 
 export const createTask = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -50,7 +52,12 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
 
 export const getTasks = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const tasks = await Tasks_Utils.getTasks();
+        const tasks = await Tasks_Utils.getTasks().lean();
+
+        tasks.forEach((task) => {
+            const isoDate = task.due_date;
+            task.due_date = dayjs(isoDate).format('MMMM D, YYYY h:mm A') as any;
+        });
 
         res.status(200).send(tasks);
         return;
@@ -59,9 +66,33 @@ export const getTasks = async (req: Request, res: Response, next: NextFunction) 
     }
 }
 
+export const getTasksByDate = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const sortedTasks = await Tasks_Utils.getTasksByDate().lean(); // Use lean to convert query res to muttable JS object 
+
+        sortedTasks.forEach((task) => {
+            const isoDate = task.due_date;
+            task.due_date = dayjs(isoDate).format('MMMM D, YYYY h:mm A') as any;
+        });
+
+        res.status(200).send(sortedTasks);
+        return
+    } catch(error) {
+        next(error);
+    }
+} 
+
 export const getTaskById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const task = await Tasks_Utils.getTaskById(req.params.task_id as unknown as ObjectId);
+        const task = await Tasks_Utils.getTaskById(req.params.task_id as unknown as ObjectId).lean();
+
+        if (!task) {
+            throw new HttpError('No task found', 400);
+        }
+
+        const isoDate = task.due_date;
+        task.due_date = dayjs(isoDate).format('MMMM D, YYYY h:mm A') as any;
+
         res.status(200).send(task);
         return;
     } catch (error) {
@@ -71,8 +102,14 @@ export const getTaskById = async (req: Request, res: Response, next: NextFunctio
 
 export const getTasksByUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const task = await Tasks_Utils.getTasksByUser(req.params.user_id as unknown as ObjectId);
-        res.status(200).send(task);
+        const tasks = await Tasks_Utils.getTasksByUser(req.params.user_id as unknown as ObjectId).lean();
+
+        tasks.forEach((task) => {
+            const isoDate = task.due_date;
+            task.due_date = dayjs(isoDate).format('MMMM D, YYYY h:mm A') as any;
+        });
+
+        res.status(200).send(tasks);
         return;
     } catch (error) {
         next(error);
@@ -93,7 +130,13 @@ export const getTasksByStatus = async (req: Request, res: Response, next: NextFu
         }
 
         // Fetch tasks based on status
-        const tasks = await Tasks_Utils.getTasksByStatus(status as any);
+        const tasks = await Tasks_Utils.getTasksByStatus(status as any).lean();
+
+        tasks.forEach((task) => {
+            const isoDate = task.due_date;
+            task.due_date = dayjs(isoDate).format('MMMM D, YYYY h:mm A') as any;
+        });        
+
         res.status(200).send(tasks);
         return;
     } catch (error) {
@@ -109,6 +152,10 @@ export const getTasksByPriority = async (req: Request, res: Response, next: Next
 
         const { priority } = req.query;
 
+        if (!priority) {
+            throw new HttpError('No query Input', 400);
+        }
+
         if (typeof priority !== 'string') {
             throw new HttpError('Invalid Input: Priority must be string', 400);
         }
@@ -117,7 +164,13 @@ export const getTasksByPriority = async (req: Request, res: Response, next: Next
             throw new HttpError('Invalid Input: Priority must be one of Low, Medium, High', 400);
         }
         
-        const tasks = await Tasks_Utils.getTasksByPriority(priority);
+        const tasks = await Tasks_Utils.getTasksByPriority(priority).lean();
+
+        tasks.forEach((task) => {
+            const isoDate = task.due_date;
+            task.due_date = dayjs(isoDate).format('MMMM D, YYYY h:mm A') as any;
+        });   
+
         res.status(200).send(tasks);
         return;
     } catch (error) {
@@ -163,7 +216,7 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
             due_date: parsedDate,
             user: user._id
         });
-        console.log(updatedTask);
+
         res.status(200).send(updatedTask);
         return;
     } catch (error) {
