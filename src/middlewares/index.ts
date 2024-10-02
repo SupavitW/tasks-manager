@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import Users_Utils from '../db/users/utils';
+import Users_Utils from '../services/userServices';
 import { get, merge } from 'lodash';
 import { HttpError } from '../interfaces';
 import * as dotev from 'dotenv';

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Users_Utils from "../db/users/utils";
+import Users_Utils from "../services/userServices";
 import { HttpError } from "../interfaces";
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {

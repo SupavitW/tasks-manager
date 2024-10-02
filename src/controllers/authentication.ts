@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import User_Utils from '../db/users/utils';
+import User_Utils from '../services/userServices';
 import { comparePasswords, passwordHash } from '../helpers';
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv'

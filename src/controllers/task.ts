@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { Tasks_Utils } from "../db/tasks/utils";
+import { Tasks_Utils } from "../services/tasksServices";
 import { HttpError } from "../interfaces";
-import Users_Utils from "../db/users/utils";
+import Users_Utils from "../services/userServices";
 import { ObjectId } from "mongoose";
 import { forEach } from "lodash";
 import dayjs from "dayjs";

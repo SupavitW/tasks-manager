@@ -1,4 +1,4 @@
-import UsersModel from "./users";
+import UsersModel from "../db/users/users";
 
 // Utils functions for Users Model
 export default class Users_Utils {
