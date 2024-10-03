@@ -17,7 +17,7 @@ export const deleteUser = async(req: Request, res: Response, next: NextFunction)
         const { id } = req.params;
         await Users_Utils.deleteUserById(id);
 
-        res.status(204);
+        res.status(204).send();
         return;
     } catch(error) {
         next(error);

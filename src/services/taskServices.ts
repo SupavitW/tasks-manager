@@ -2,7 +2,7 @@ import TasksModel from "../db/tasks/tasks";
 import { Task } from "../interfaces";
 
 // Utils functions for Tasks Model
-export class Tasks_Utils {
+export default class Tasks_Utils {
     static getTasks = () => {
         return TasksModel.find().populate('user'); // populate the user_id to show user details relative to each task
     }
