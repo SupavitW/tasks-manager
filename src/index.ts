@@ -58,8 +58,11 @@ const errorHandler = (err: HttpError, req: Request, res: Response, next: NextFun
 app.use(errorHandler);
 
 const server = http.createServer(app);
-server.listen(PORT, () => {
-    console.log(`The server is running on ${PORT}`);
-});
+
+if (process.env.NODE_ENV !== 'test') {
+    server.listen(PORT, () => {
+        console.log(`The server is running on ${PORT}`);
+    });
+}
 
 export default server;

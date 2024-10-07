@@ -42,6 +42,10 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
             due_date: parsedDate,
             user: user._id
         });
+
+        if (!newTask) {
+            throw new HttpError('Cannot create task', 500);
+        }
         res.status(201).send(newTask);
         return;
     } catch (error) {
@@ -215,6 +219,10 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
             due_date: parsedDate,
             user: user._id
         });
+
+        if (!updatedTask) {
+            throw new HttpError('Cannot update task', 500);
+        }
 
         res.status(200).send(updatedTask);
         return;

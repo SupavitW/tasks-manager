@@ -85,10 +85,11 @@ export const logout = async (req: Request, res: Response, next: NextFunction) =>
     try {
         const token = req.cookies.Task_Manager_Auth
         if (!token) {
-            res.status(204);
-            return
+            res.status(204).send();;
+            return;
         }
-        res.status(200).clearCookie('Task_Manager_Auth', { expires: new Date(0) }).json({ "msg": "Logout Successfully" });
+        res.status(200).clearCookie('Task_Manager_Auth').json({ "msg": "Logout Successfully" });
+        return;
     } catch (error) {
         next(error);
     }

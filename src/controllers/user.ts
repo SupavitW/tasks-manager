@@ -15,7 +15,16 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
 export const deleteUser = async(req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        await Users_Utils.deleteUserById(id);
+        if  (!id) {
+            const noUser = new HttpError('Invalid Input', 400);
+            throw noUser;
+        };
+        const deletedUser = await Users_Utils.deleteUserById(id);
+
+        if(!deletedUser) {
+            const noUser = new HttpError('No user found', 400);
+            throw noUser;
+        }
 
         res.status(204).send();
         return;
